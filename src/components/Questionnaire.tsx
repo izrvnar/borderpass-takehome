@@ -229,13 +229,15 @@ export function Questionnaire({
           <Button
             variant="outline"
             onClick={handleBack}
-            disabled={isFirstQuestion && currentPage === "question"}
+            disabled={
+              isFirstQuestion && currentPage === "question" && !cameFromReview
+            }
             size="lg"
           >
-            {"Back"}
+            {cameFromReview ? "Back to Review" : "Back"}
           </Button>
           <Button onClick={handleNext} size="lg">
-            {"Next"}
+            {isLastQuestion ? "Review Answers" : "Next"}
           </Button>
         </div>
       </div>
