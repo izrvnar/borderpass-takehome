@@ -236,7 +236,7 @@ export function Questionnaire({
           >
             {cameFromReview ? "Back to Review" : "Back"}
           </Button>
-          <Button onClick={handleNext} size="lg">
+          <Button onClick={handleNext} disabled={cameFromReview} size="lg">
             {isLastQuestion ? "Review Answers" : "Next"}
           </Button>
         </div>
