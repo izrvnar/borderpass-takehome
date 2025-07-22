@@ -1,4 +1,9 @@
-export type QuestionTypes = 'text' | 'textarea' | 'select' | 'radio' | 'checkbox';
+export type QuestionType =
+  | "text"
+  | "textarea"
+  | "select"
+  | "radio"
+  | "checkbox";
 
 export interface QuestionOption {
   value: string;
@@ -7,44 +12,49 @@ export interface QuestionOption {
 
 export interface BaseQuestion {
   id: string;
-  type: QuestionTypes;
+  type: QuestionType;
   title: string;
   description?: string;
   required: boolean;
 }
 
 export interface TextQuestion extends BaseQuestion {
-  type: 'text';
+  type: "text";
   placeholder?: string;
   maxLength?: number;
 }
 
 export interface TextareaQuestion extends BaseQuestion {
-  type: 'textarea';
+  type: "textarea";
   placeholder?: string;
   maxLength?: number;
   rows?: number;
 }
 
 export interface SelectQuestion extends BaseQuestion {
-  type: 'select';
+  type: "select";
   options: QuestionOption[];
   placeholder?: string;
 }
 
 export interface RadioQuestion extends BaseQuestion {
-  type: 'radio';
+  type: "radio";
   options: QuestionOption[];
 }
 
 export interface CheckboxQuestion extends BaseQuestion {
-  type: 'checkbox';
+  type: "checkbox";
   options: QuestionOption[];
   minSelections?: number;
   maxSelections?: number;
 }
 
-export type Question = TextareaQuestion | TextareaQuestion | SelectQuestion | RadioQuestion | CheckboxQuestion;
+export type Question =
+  | TextQuestion
+  | TextareaQuestion
+  | SelectQuestion
+  | RadioQuestion
+  | CheckboxQuestion;
 
 export interface Questionnaire {
   id: string;
@@ -53,8 +63,13 @@ export interface Questionnaire {
   questions: Question[];
 }
 
-export type QuestionnaireAnswer = string | string[] | null;
+export type QuestionAnswer = string | string[] | null;
 
 export interface QuestionnaireAnswers {
-  [questionId: string]: QuestionnaireAnswer;
+  [questionId: string]: QuestionAnswer;
+}
+
+export interface ValidationError {
+  questionId: string;
+  message: string;
 }
