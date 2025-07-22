@@ -1,0 +1,79 @@
+{
+  "id": "linux-distro-survey-2025",
+  "title": "Linux Distribution Preferences Survey",
+  "description": "Help us understand the Linux community's preferences and experiences with different distributions.",
+  "questions": [
+    {
+      "id": "username",
+      "type": "text",
+      "title": "What is your preferred username?",
+      "description": "Please provide your Linux username or handle",
+      "required": true,
+      "placeholder": "Enter your username",
+      "maxLength": 50
+    },
+    {
+      "id": "primary-distro",
+      "type": "select",
+      "title": "What is your primary Linux distribution?",
+      "description": "Select the distro you use most frequently",
+      "required": true,
+      "placeholder": "Select your primary distro",
+      "options": [
+        { "value": "ubuntu", "label": "Ubuntu" },
+        { "value": "debian", "label": "Debian" },
+        { "value": "arch", "label": "Arch Linux" },
+        { "value": "fedora", "label": "Fedora" },
+        { "value": "opensuse", "label": "openSUSE" },
+        { "value": "mint", "label": "Linux Mint" },
+        { "value": "manjaro", "label": "Manjaro" },
+        { "value": "centos", "label": "CentOS" },
+        { "value": "rhel", "label": "Red Hat Enterprise Linux" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    {
+      "id": "experience-level",
+      "type": "radio",
+      "title": "How would you rate your Linux experience level?",
+      "description": "Choose the option that best describes your expertise",
+      "required": true,
+      "options": [
+        { "value": "newbie", "label": "New to Linux (< 1 year)" },
+        { "value": "intermediate", "label": "Intermediate (1-3 years)" },
+        { "value": "experienced", "label": "Experienced (3-7 years)" },
+        { "value": "expert", "label": "Expert (7+ years)" },
+        { "value": "kernel-hacker", "label": "Kernel Hacker/Maintainer" }
+      ]
+    },
+    {
+      "id": "desktop-environments",
+      "type": "checkbox",
+      "title": "Which desktop environments have you used?",
+      "description": "Select all that you have experience with",
+      "required": false,
+      "options": [
+        { "value": "gnome", "label": "GNOME" },
+        { "value": "kde", "label": "KDE Plasma" },
+        { "value": "hyprland", "label": "Hyprland" },
+        { "value": "i3", "label": "i3wm" },
+        { "value": "awesome", "label": "Awesome WM" },
+        { "value": "dwm", "label": "dwm" },
+        { "value": "cinnamon", "label": "Cinnamon" },
+        { "value": "mate", "label": "MATE" }
+      ],
+      "minSelections": 0,
+      "maxSelections": 8
+    },
+    {
+      "id": "linux-story",
+      "type": "textarea",
+      "title": "Tell us about your Linux journey",
+      "description": "Share your experience with Linux - what got you started, challenges you've faced, or achievements you're proud of",
+      "required": false,
+      "placeholder": "I started using Linux because... My biggest challenge was... I'm proud that I...",
+      "maxLength": 500,
+      "rows": 4
+    }
+  ]
+}
