@@ -174,6 +174,38 @@
     .questionnaire-navigation {
         @apply flex justify-between items-center pt-6 border-t border-border/30;
     }
+
+    .questionnaire-success-container {
+        @apply text-center space-y-8 p-8;
+    }
+
+    .questionnaire-success-icon {
+        @apply w-20 h-20 bg-[var(--questionnaire-success-bg)] rounded-full
+             flex items-center justify-center mx-auto shadow-lg;
+    }
+
+    .questionnaire-success-title {
+        @apply text-3xl font-bold text-[var(--questionnaire-success)];
+    }
+
+    .questionnaire-success-message {
+        @apply text-muted-foreground text-lg leading-relaxed max-w-md mx-auto;
+    }
+    .questionnaire-review-container {
+        @apply space-y-6;
+    }
+
+    .questionnaire-review-item {
+        @apply p-6 border rounded-xl transition-all duration-200 hover:shadow-md;
+    }
+
+    .questionnaire-review-item.has-error {
+        @apply border-destructive/50 bg-destructive/5 shadow-destructive/10;
+    }
+
+    .questionnaire-review-item:not(.has-error) {
+        @apply border-border/50 bg-card/30 hover:bg-card/50;
+    }
 }
 
 @layer base {

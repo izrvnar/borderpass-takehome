@@ -2,26 +2,36 @@ import { useState } from "react";
 import type {
   Questionnaire as QuestionnaireType,
   QuestionnaireAnswers,
+  ValidationError,
 } from "@/types/questionnaire";
 import { QuestionRenderer } from "./QuestionRenderer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { QuestionnaireSuccess } from "./QuestionnaireSuccess";
+import { QuestionnaireReview } from "./QuestionnaireReview";
 
 interface QuestionnaireProps {
   questionnaire: QuestionnaireType;
   onComplete?: (answers: QuestionnaireAnswers) => void;
 }
 
-type PageType = "question";
+type PageType = "question" | "success" | "review";
 
-export function Questionnaire({ questionnaire }: QuestionnaireProps) {
-  const [currentPage] = useState<PageType>("question");
+export function Questionnaire({
+  questionnaire,
+  onComplete,
+}: QuestionnaireProps) {
+  const [currentPage, setCurrentPage] = useState<PageType>("question");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuestionnaireAnswers>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cameFromReview, setCameFromReview] = useState(false);
 
   const currentQuestion = questionnaire.questions[currentQuestionIndex];
   const isFirstQuestion = currentQuestionIndex === 0;
+  const isLastQuestion =
+    currentQuestionIndex === questionnaire.questions.length - 1;
 
   const validateQuestion = (questionId: string): string | null => {
     const question = questionnaire.questions.find((q) => q.id === questionId);
@@ -61,15 +71,44 @@ export function Questionnaire({ questionnaire }: QuestionnaireProps) {
     return true;
   };
 
+  const validateAllQuestions = (): ValidationError[] => {
+    const validationErrors: ValidationError[] = [];
+    const newErrors: Record<string, string> = {};
+
+    questionnaire.questions.forEach((question) => {
+      const error = validateQuestion(question.id);
+      if (error) {
+        validationErrors.push({ questionId: question.id, message: error });
+        newErrors[question.id] = error;
+      }
+    });
+
+    setErrors(newErrors);
+    return validationErrors;
+  };
+
   const handleNext = () => {
     if (!validateCurrentQuestion()) return;
-    else {
+    if (cameFromReview) {
+      setCameFromReview(false);
+    }
+
+    if (isLastQuestion) {
+      setCurrentPage("review");
+    } else {
       setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
 
   const handleBack = () => {
-    if (!isFirstQuestion) {
+    if (currentPage === "review") {
+      setCurrentQuestionIndex(questionnaire.questions.length - 1);
+      setCurrentPage("question");
+    } else if (cameFromReview) {
+      // If user came from review, go back to review
+      setCameFromReview(false);
+      setCurrentPage("review");
+    } else if (!isFirstQuestion) {
       setCurrentQuestionIndex((prev) => prev - 1);
     }
   };
@@ -87,6 +126,63 @@ export function Questionnaire({ questionnaire }: QuestionnaireProps) {
       });
     }
   };
+
+  const submitSurvey = async () => {
+    const validationErrors = validateAllQuestions();
+    if (validationErrors.length > 0) {
+      // back to first question with error
+      const firstErrorQuestion = questionnaire.questions.findIndex((q) =>
+        validationErrors.some((e) => e.questionId === q.id),
+      );
+      setCurrentQuestionIndex(firstErrorQuestion);
+      setCurrentPage("question");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // API call would go here
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      setCurrentPage("success");
+      onComplete?.(answers);
+    } catch (error) {
+      console.error("Submission failed:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const restartSurvey = () => {
+    setCurrentQuestionIndex(0);
+    setAnswers({});
+    setErrors({});
+    setCurrentPage("question");
+  };
+
+  const editQuestion = (questionIndex: number) => {
+    setCurrentQuestionIndex(questionIndex);
+    setCurrentPage("question");
+    setCameFromReview(true);
+  };
+
+  if (currentPage === "success") {
+    return <QuestionnaireSuccess onStartOver={restartSurvey} />;
+  }
+
+  if (currentPage === "review") {
+    return (
+      <QuestionnaireReview
+        questionnaire={questionnaire}
+        answers={answers}
+        errors={errors}
+        isSubmitting={isSubmitting}
+        onEditQuestion={editQuestion}
+        onBack={handleBack}
+        onSubmit={submitSurvey}
+      />
+    );
+  }
 
   return (
     <div className="questionnaire-container">
@@ -133,13 +229,15 @@ export function Questionnaire({ questionnaire }: QuestionnaireProps) {
           <Button
             variant="outline"
             onClick={handleBack}
-            disabled={isFirstQuestion && currentPage === "question"}
+            disabled={
+              isFirstQuestion && currentPage === "question" && !cameFromReview
+            }
             size="lg"
           >
-            {"Back"}
+            {cameFromReview ? "Back to Review" : "Back"}
           </Button>
-          <Button onClick={handleNext} size="lg">
-            {"Next"}
+          <Button onClick={handleNext} disabled={cameFromReview} size="lg">
+            {isLastQuestion ? "Review Answers" : "Next"}
           </Button>
         </div>
       </div>
