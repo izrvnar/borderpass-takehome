@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { QuestionnaireSuccess } from "./QuestionnaireSuccess";
 import { QuestionnaireReview } from "./QuestionnaireReview";
+import { Progress } from "./ui/progress";
 
 interface QuestionnaireProps {
   questionnaire: QuestionnaireType;
@@ -184,6 +185,27 @@ export function Questionnaire({
     );
   }
 
+  const getProgress = () => {
+    const current =
+      currentPage === "question"
+        ? currentQuestionIndex + 1
+        : questionnaire.questions.length;
+    const total = questionnaire.questions.length;
+    // Progress starts at 0% and only increases when user clicks "Next"
+    const percentage =
+      currentPage === "question"
+        ? Math.round((currentQuestionIndex / total) * 100)
+        : 100;
+
+    return {
+      current,
+      total,
+      percentage,
+    };
+  };
+
+  const progress = getProgress();
+
   return (
     <div className="questionnaire-container">
       <div className="questionnaire-card">
@@ -195,6 +217,16 @@ export function Questionnaire({
               {questionnaire.description}
             </p>
           )}
+        </div>
+
+        <div className="questionnaire-progress-container">
+          <div className="flex justify-between text-sm font-medium">
+            <span>
+              Question {progress.current} of {progress.total}
+            </span>
+            <span>{progress.percentage}% complete</span>
+          </div>
+          <Progress value={progress.percentage} className="h-3" />
         </div>
         {/* Question */}
         <div className="questionnaire-question-container">
