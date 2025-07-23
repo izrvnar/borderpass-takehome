@@ -70,15 +70,17 @@ export function Questionnaire({
           )}
         </div>
 
-        <div className="questionnaire-progress-container">
-          <div className="flex justify-between text-sm font-medium">
-            <span>
-              Question {progress.current} of {progress.total}
-            </span>
-            <span>{progress.percentage}% complete</span>
+        {!cameFromReview && (
+          <div className="questionnaire-progress-container">
+            <div className="flex justify-between text-sm font-medium">
+              <span>
+                Question {progress.current} of {progress.total}
+              </span>
+              <span>{progress.percentage}% complete</span>
+            </div>
+            <Progress value={progress.percentage} className="h-3" />
           </div>
-          <Progress value={progress.percentage} className="h-3" />
-        </div>
+        )}
         {/* Question */}
         <div className="questionnaire-question-container">
           <div className="questionnaire-question-header">

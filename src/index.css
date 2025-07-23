@@ -134,7 +134,7 @@
     }
 
     .questionnaire-card {
-        @apply max-w-[var(--questionnaire-max-width)] mx-auto bg-[var(--questionnaire-card)]
+        @apply max-w-[var(--questionnaire-max-width)] min-w-[20rem] mx-auto bg-[var(--questionnaire-card)]
            rounded-xl shadow-lg border border-border/50 p-8 space-y-8;
     }
 

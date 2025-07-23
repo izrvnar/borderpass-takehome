@@ -76,7 +76,7 @@ export function QuestionnaireReview({
                       <div className="questionnaire-answer-display">
                         {answer ? (
                           Array.isArray(answer) ? (
-                            <div>
+                            <div className="flex flex-wrap gap-2">
                               {answer.map((value) => {
                                 const option =
                                   question.type === "checkbox"
