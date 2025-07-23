@@ -3,6 +3,7 @@ import type {
   Questionnaire as QuestionnaireType,
   QuestionnaireAnswers,
   ValidationError,
+  QuestionAnswer,
 } from "@/types/questionnaire";
 
 type PageType = "question" | "success" | "review";
@@ -121,7 +122,7 @@ export function useQuestionnaire({
   ]);
 
   const handleAnswerChange = useCallback(
-    (answer: any) => {
+    (answer: QuestionAnswer) => {
       if (!currentQuestion) return; // Handle empty questionnaire
       setAnswers((prev) => ({
         ...prev,
